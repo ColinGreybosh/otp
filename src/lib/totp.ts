@@ -9,6 +9,8 @@ import {
   validateToken,
 } from '@/utils/validation';
 
+import { decodeSecretForHMAC } from '../utils/crypto';
+
 import type { OTPResult, TOTPConfig, ValidationResult } from '@/types';
 
 /**
@@ -119,7 +121,7 @@ export class TOTP {
   private generateHMAC(timeBuffer: Readonly<Buffer>): Buffer {
     const hmac = createHmac(
       this.config.algorithm.toLowerCase(),
-      this.config.secret
+      decodeSecretForHMAC(this.config.secret)
     );
     hmac.update(timeBuffer);
     return hmac.digest();

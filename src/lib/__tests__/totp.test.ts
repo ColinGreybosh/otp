@@ -1,4 +1,5 @@
 import { describe, expect, it, jest } from '@jest/globals';
+import * as base32 from 'hi-base32';
 
 import { OTPAlgorithm, OTPException, TOTPConfig } from '../../types';
 import { TOTP } from '../totp';
@@ -187,10 +188,12 @@ describe('TOTP', () => {
     // The test token shared secret uses the ASCII string value "12345678901234567890"
     // For different algorithms, the secret is padded to the appropriate length
     const rfcSecrets = {
-      SHA1: '12345678901234567890', // 20 bytes ASCII
-      SHA256: '12345678901234567890123456789012', // 32 bytes ASCII
-      SHA512:
-        '1234567890123456789012345678901234567890123456789012345678901234', // 64 bytes ASCII
+      SHA1: base32.encode('12345678901234567890', true), // 20 bytes ASCII
+      SHA256: base32.encode('12345678901234567890123456789012', true), // 32 bytes ASCII
+      SHA512: base32.encode(
+        '1234567890123456789012345678901234567890123456789012345678901234',
+        true
+      ), // 64 bytes ASCII
     };
 
     const testVectors = [

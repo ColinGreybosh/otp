@@ -1,6 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 
 import {
+  generateSecret,
   OTPAlgorithm,
   OTPException,
   TOTP,
@@ -79,5 +80,18 @@ describe('index exports', () => {
     const exception = new OTPException('INVALID_SECRET', 'Test message');
     expect(exception).toBeInstanceOf(OTPException);
     expect(exception.code).toBe('INVALID_SECRET');
+  });
+
+  it('should export crypto utility functions', () => {
+    expect(generateSecret).toBeDefined();
+    expect(typeof generateSecret).toBe('function');
+  });
+
+  it('should allow using crypto functions from exports', () => {
+    expect(() => {
+      const secret = generateSecret(32);
+      expect(typeof secret).toBe('string');
+      expect(secret.length).toBeGreaterThan(0);
+    }).not.toThrow();
   });
 });

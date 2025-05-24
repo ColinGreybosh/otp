@@ -1,5 +1,7 @@
 import { type OTPAlgorithm, OTPException } from '@/types';
 
+import { decodeSecretForHMAC } from './crypto';
+
 /**
  * Validates if the provided secret is valid for OTP generation
  */
@@ -17,6 +19,8 @@ export function validateSecret(secret: string): void {
       'Secret must be at least 16 characters long'
     );
   }
+
+  decodeSecretForHMAC(secret);
 }
 
 /**

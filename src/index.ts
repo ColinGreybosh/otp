@@ -34,5 +34,8 @@ export {
   validateToken,
 } from './utils/validation';
 
+// Export crypto utility functions
+export { generateSecret } from './utils/crypto';
+
 // Default export for convenience
 export { TOTP as default } from './lib/totp';

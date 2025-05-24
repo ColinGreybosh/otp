@@ -64,5 +64,8 @@
     "*.{json,md,yml,yaml}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "hi-base32": "^0.5.1"
   }
 }
