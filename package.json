@@ -1,9 +1,17 @@
 {
-  "name": "otp",
-  "version": "1.0.0",
-  "description": "A project for generating, validating, and managing one-time passwords (OTP) for authentication purposes.",
+  "name": "@colingreybosh/otp-lib",
+  "version": "0.0.1",
+  "description": "A comprehensive TypeScript library for generating, validating, and managing one-time passwords (OTP) for authentication purposes.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "homepage": "https://github.com/ColinGreybosh/otp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ColinGreybosh/otp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ColinGreybosh/otp/issues"
+  },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
     "build:dev": "tsc -p tsconfig.dev.json",
@@ -20,14 +28,27 @@
     "test:coverage": "jest --coverage",
     "test:ci": "jest --coverage --watchAll=false --passWithNoTests",
     "validate": "npm run type-check && npm run lint && npm run format:check && npm run test:ci",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prepublishOnly": "npm run clean && npm run build && npm run validate"
   },
   "keywords": [
     "typescript",
     "otp",
+    "totp",
+    "hotp",
     "authentication",
     "security",
-    "two-factor"
+    "two-factor",
+    "2fa",
+    "one-time-password",
+    "google-authenticator",
+    "rfc6238",
+    "rfc4226"
+  ],
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
   ],
   "author": "Colin Greybosh",
   "license": "MIT",
