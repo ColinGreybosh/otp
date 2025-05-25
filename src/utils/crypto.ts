@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 
 import * as base32 from 'hi-base32';
 
-import { OTPException } from '@/types';
+import { OTPException, SecretLength } from '@/types';
 
 /**
  * Generates a cryptographically secure random secret and returns it as a base32-encoded string
@@ -17,7 +17,7 @@ import { OTPException } from '@/types';
  * const shortSecret = generateSecret(16); // 16 bytes -> ~26 character base32 string
  * ```
  */
-export function generateSecret(length: number = 32): string {
+export function generateSecret(length: SecretLength = 32): string {
   if (!Number.isInteger(length) || length <= 0) {
     throw new OTPException(
       'INVALID_SECRET',

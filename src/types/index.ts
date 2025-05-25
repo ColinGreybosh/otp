@@ -74,3 +74,5 @@ export class OTPException extends Error {
     this.code = code;
   }
 }
+
+export type SecretLength = 16 | 20 | 32 | 64;

@@ -3,7 +3,7 @@ import { createHmac } from 'node:crypto';
 import { describe, expect, it } from '@jest/globals';
 import * as base32 from 'hi-base32';
 
-import { OTPException } from '../../types';
+import { OTPException, SecretLength } from '../../types';
 import { decodeSecretForHMAC, generateSecret } from '../crypto';
 
 describe('crypto utilities', () => {
@@ -61,22 +61,22 @@ describe('crypto utilities', () => {
     });
 
     it('should reject invalid length parameters', () => {
-      expect(() => generateSecret(0)).toThrow(OTPException);
-      expect(() => generateSecret(-1)).toThrow(OTPException);
-      expect(() => generateSecret(1.5)).toThrow(OTPException);
-      expect(() => generateSecret(NaN)).toThrow(OTPException);
+      expect(() => generateSecret(0 as never)).toThrow(OTPException);
+      expect(() => generateSecret(-1 as never)).toThrow(OTPException);
+      expect(() => generateSecret(1.5 as never)).toThrow(OTPException);
+      expect(() => generateSecret(NaN as never)).toThrow(OTPException);
 
-      expect(() => generateSecret(0)).toThrow(
+      expect(() => generateSecret(0 as never)).toThrow(
         'Secret length must be a positive integer'
       );
     });
 
     it('should reject length parameters that are too small for security', () => {
-      expect(() => generateSecret(15)).toThrow(OTPException);
-      expect(() => generateSecret(8)).toThrow(OTPException);
-      expect(() => generateSecret(1)).toThrow(OTPException);
+      expect(() => generateSecret(15 as never)).toThrow(OTPException);
+      expect(() => generateSecret(8 as never)).toThrow(OTPException);
+      expect(() => generateSecret(1 as never)).toThrow(OTPException);
 
-      expect(() => generateSecret(15)).toThrow(
+      expect(() => generateSecret(15 as never)).toThrow(
         'Secret length must be at least 16 bytes for security'
       );
     });
@@ -203,7 +203,7 @@ describe('crypto utilities', () => {
     });
 
     it('should work with different secret lengths', () => {
-      const lengths = [16, 20, 32, 64];
+      const lengths = [16, 20, 32, 64] satisfies SecretLength[];
 
       lengths.forEach(length => {
         const secret = generateSecret(length);
