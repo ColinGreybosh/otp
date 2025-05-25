@@ -26,6 +26,7 @@ export { TOTP } from './lib/totp';
 
 // Export utility functions
 export {
+  getSecretLength,
   validateAlgorithm,
   validateCounter,
   validateDigits,

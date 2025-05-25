@@ -15,7 +15,7 @@ export function validateSecret(secret: string, algorithm: OTPAlgorithm): void {
 
   const decodedSecret = decodeSecretForHMAC(secret);
 
-  const expectedLength = algorithmOutputLength(algorithm);
+  const expectedLength = getSecretLength(algorithm);
   if (decodedSecret.length !== expectedLength) {
     throw new OTPException(
       'INVALID_SECRET',
@@ -24,7 +24,10 @@ export function validateSecret(secret: string, algorithm: OTPAlgorithm): void {
   }
 }
 
-function algorithmOutputLength(algorithm: OTPAlgorithm): SecretLength {
+/**
+ * Returns the expected length of the secret for the given algorithm
+ */
+export function getSecretLength(algorithm: OTPAlgorithm): SecretLength {
   switch (algorithm) {
     case 'SHA1':
       return 20;
