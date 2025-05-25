@@ -1,4 +1,5 @@
 import { describe, expect, it } from '@jest/globals';
+import * as base32 from 'hi-base32';
 
 import { OTPException } from '@/types';
 
@@ -15,32 +16,35 @@ describe('validation utilities', () => {
   describe('validateSecret', () => {
     it('should accept valid secrets', () => {
       expect(() => {
-        validateSecret('JBSWY3DPEHPK3PXP');
+        validateSecret(
+          base32.encode(Buffer.from('A'.repeat(20), 'ascii')),
+          'SHA1'
+        );
       }).not.toThrow();
       expect(() => {
-        validateSecret('a'.repeat(16));
-      }).not.toThrow();
-      expect(() => {
-        validateSecret('a'.repeat(32));
+        validateSecret(
+          base32.encode(Buffer.from('a'.repeat(32), 'ascii')),
+          'SHA256'
+        );
       }).not.toThrow();
     });
 
     it('should reject empty or non-string secrets', () => {
       expect(() => {
-        validateSecret('');
+        validateSecret('', 'SHA1');
       }).toThrow(OTPException);
       expect(() => {
-        validateSecret('');
+        validateSecret('', 'SHA1');
       }).toThrow('Secret must be a non-empty string');
     });
 
     it('should reject secrets that are too short', () => {
       expect(() => {
-        validateSecret('short');
+        validateSecret('short', 'SHA1');
       }).toThrow(OTPException);
       expect(() => {
-        validateSecret('a'.repeat(15));
-      }).toThrow('Secret must be at least 16 characters long');
+        validateSecret('a'.repeat(15), 'SHA1');
+      }).toThrow('Secret must be 20 bytes long for SHA1 algorithm');
     });
   });
 

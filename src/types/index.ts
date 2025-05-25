@@ -8,6 +8,11 @@
 export type OTPAlgorithm = 'SHA1' | 'SHA256' | 'SHA512';
 
 /**
+ * Supported secret lengths in bytes
+ */
+export type SecretLength = 20 | 32 | 64;
+
+/**
  * OTP configuration interface
  */
 export interface OTPConfig {
@@ -74,5 +79,3 @@ export class OTPException extends Error {
     this.code = code;
   }
 }
-
-export type SecretLength = 16 | 20 | 32 | 64;

@@ -21,20 +21,15 @@ describe('crypto utilities', () => {
     });
 
     it('should generate a base32-encoded secret with custom length', () => {
-      const secret16 = generateSecret(16);
       const secret64 = generateSecret(64);
 
-      expect(typeof secret16).toBe('string');
       expect(typeof secret64).toBe('string');
 
-      // 16 bytes -> ~26 characters, 64 bytes -> ~103 characters
-      expect(secret16.length).toBeGreaterThanOrEqual(25);
-      expect(secret16.length).toBeLessThanOrEqual(32);
+      // 64 bytes -> ~103 characters
       expect(secret64.length).toBeGreaterThanOrEqual(100);
       expect(secret64.length).toBeLessThanOrEqual(110);
 
       // Should only contain valid base32 characters
-      expect(secret16).toMatch(/^[A-Z2-7]+=*$/);
       expect(secret64).toMatch(/^[A-Z2-7]+=*$/);
     });
 
@@ -53,7 +48,7 @@ describe('crypto utilities', () => {
       const iterations = 100;
 
       for (let i = 0; i < iterations; i++) {
-        secrets.add(generateSecret(16));
+        secrets.add(generateSecret(20));
       }
 
       // All secrets should be unique (extremely high probability with proper randomness)
@@ -77,13 +72,13 @@ describe('crypto utilities', () => {
       expect(() => generateSecret(1 as never)).toThrow(OTPException);
 
       expect(() => generateSecret(15 as never)).toThrow(
-        'Secret length must be at least 16 bytes for security'
+        'Secret length must be 20, 32, or 64 bytes'
       );
     });
 
     it('should accept minimum secure length', () => {
-      expect(() => generateSecret(16)).not.toThrow();
-      const secret = generateSecret(16);
+      expect(() => generateSecret(20)).not.toThrow();
+      const secret = generateSecret(20);
       expect(secret).toMatch(/^[A-Z2-7]+=*$/);
     });
   });
@@ -203,7 +198,7 @@ describe('crypto utilities', () => {
     });
 
     it('should work with different secret lengths', () => {
-      const lengths = [16, 20, 32, 64] satisfies SecretLength[];
+      const lengths = [20, 32, 64] satisfies SecretLength[];
 
       lengths.forEach(length => {
         const secret = generateSecret(length);

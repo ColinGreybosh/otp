@@ -1,8 +1,8 @@
 import { describe, expect, it } from '@jest/globals';
+import * as base32 from 'hi-base32';
 
 import {
   generateSecret,
-  OTPAlgorithm,
   OTPException,
   TOTP,
   validateAlgorithm,
@@ -46,8 +46,8 @@ describe('index exports', () => {
 
   it('should allow creating TOTP instance from exports', () => {
     const config = {
-      secret: 'JBSWY3DPEHPK3PXP',
-      algorithm: 'SHA256' as OTPAlgorithm,
+      secret: base32.encode(Buffer.from('A'.repeat(20), 'ascii')),
+      algorithm: 'SHA1' as const,
       digits: 6,
       period: 30,
     };
@@ -57,10 +57,13 @@ describe('index exports', () => {
 
   it('should allow using validation functions from exports', () => {
     expect(() => {
-      validateSecret('JBSWY3DPEHPK3PXP');
+      validateSecret(
+        base32.encode(Buffer.from('A'.repeat(20), 'ascii')),
+        'SHA1'
+      );
     }).not.toThrow();
     expect(() => {
-      validateAlgorithm('SHA256');
+      validateAlgorithm('SHA1');
     }).not.toThrow();
     expect(() => {
       validateDigits(6);
@@ -89,7 +92,7 @@ describe('index exports', () => {
 
   it('should allow using crypto functions from exports', () => {
     expect(() => {
-      const secret = generateSecret(32);
+      const secret = generateSecret(20);
       expect(typeof secret).toBe('string');
       expect(secret.length).toBeGreaterThan(0);
     }).not.toThrow();

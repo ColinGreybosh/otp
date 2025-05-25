@@ -84,8 +84,8 @@ export class TOTP {
    * Validates the TOTP configuration
    */
   private validateConfig(config: TOTPConfig): void {
-    validateSecret(config.secret);
     validateAlgorithm(config.algorithm);
+    validateSecret(config.secret, config.algorithm);
     validateDigits(config.digits);
     validatePeriod(config.period);
   }

@@ -1,11 +1,11 @@
-import { type OTPAlgorithm, OTPException } from '@/types';
+import { type OTPAlgorithm, OTPException, SecretLength } from '@/types';
 
 import { decodeSecretForHMAC } from './crypto';
 
 /**
  * Validates if the provided secret is valid for OTP generation
  */
-export function validateSecret(secret: string): void {
+export function validateSecret(secret: string, algorithm: OTPAlgorithm): void {
   if (!secret || typeof secret !== 'string') {
     throw new OTPException(
       'INVALID_SECRET',
@@ -13,14 +13,34 @@ export function validateSecret(secret: string): void {
     );
   }
 
-  if (secret.length < 16) {
+  const decodedSecret = decodeSecretForHMAC(secret);
+
+  const expectedLength = algorithmOutputLength(algorithm);
+  if (decodedSecret.length !== expectedLength) {
     throw new OTPException(
       'INVALID_SECRET',
-      'Secret must be at least 16 characters long'
+      `Secret must be ${expectedLength.toString()} bytes long for ${algorithm} algorithm`
     );
   }
+}
 
-  decodeSecretForHMAC(secret);
+function algorithmOutputLength(algorithm: OTPAlgorithm): SecretLength {
+  switch (algorithm) {
+    case 'SHA1':
+      return 20;
+    case 'SHA256':
+      return 32;
+    case 'SHA512':
+      return 64;
+    default:
+      throw new UnexpectedCaseError(algorithm);
+  }
+}
+
+class UnexpectedCaseError extends Error {
+  constructor(value: never) {
+    super(`Unexpected case: ${value as string}`);
+  }
 }
 
 /**

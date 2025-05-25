@@ -6,8 +6,8 @@ import { TOTP } from '../totp';
 
 describe('TOTP', () => {
   const validConfig = {
-    secret: 'JBSWY3DPEHPK3PXP',
-    algorithm: 'SHA256',
+    secret: base32.encode(Buffer.from('12345678901234567890', 'ascii')), // 20 bytes encoded in base32
+    algorithm: 'SHA1',
     digits: 6,
     period: 30,
   } satisfies TOTPConfig;
@@ -88,8 +88,23 @@ describe('TOTP', () => {
 
     it('should handle different algorithms', () => {
       const totpSHA1 = new TOTP({ ...validConfig, algorithm: 'SHA1' });
-      const totpSHA256 = new TOTP({ ...validConfig, algorithm: 'SHA256' });
-      const totpSHA512 = new TOTP({ ...validConfig, algorithm: 'SHA512' });
+      const totpSHA256 = new TOTP({
+        ...validConfig,
+        algorithm: 'SHA256',
+        secret: base32.encode(
+          Buffer.from('12345678901234567890123456789012', 'ascii')
+        ),
+      });
+      const totpSHA512 = new TOTP({
+        ...validConfig,
+        algorithm: 'SHA512',
+        secret: base32.encode(
+          Buffer.from(
+            '1234567890123456789012345678901234567890123456789012345678901234',
+            'ascii'
+          )
+        ),
+      });
 
       const timestamp = 1234567890000;
 

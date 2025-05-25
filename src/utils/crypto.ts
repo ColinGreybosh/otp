@@ -14,7 +14,7 @@ import { OTPException, SecretLength } from '@/types';
  * @example
  * ```typescript
  * const secret = generateSecret(); // 32 bytes -> ~52 character base32 string
- * const shortSecret = generateSecret(16); // 16 bytes -> ~26 character base32 string
+ * const shortSecret = generateSecret(20); // 20 bytes -> ~33 character base32 string
  * ```
  */
 export function generateSecret(length: SecretLength = 32): string {
@@ -25,10 +25,10 @@ export function generateSecret(length: SecretLength = 32): string {
     );
   }
 
-  if (length < 16) {
+  if (![20, 32, 64].includes(length)) {
     throw new OTPException(
       'INVALID_SECRET',
-      'Secret length must be at least 16 bytes for security'
+      'Secret length must be 20, 32, or 64 bytes'
     );
   }
 
