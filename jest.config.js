@@ -29,14 +29,6 @@ module.exports = {
     ],
   },
 
-  // Module name mapping for path aliases
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '^@/types/(.*)$': '<rootDir>/src/types/$1',
-    '^@/utils/(.*)$': '<rootDir>/src/utils/$1',
-    '^@/lib/(.*)$': '<rootDir>/src/lib/$1',
-  },
-
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 

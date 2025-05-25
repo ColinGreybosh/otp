@@ -10,12 +10,6 @@
     "baseUrl": ".",
     "outDir": "./dist-test",
     "rootDir": ".",
-    "paths": {
-      "@/*": ["src/*"],
-      "@/types/*": ["src/types/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/lib/*": ["src/lib/*"]
-    },
     "types": ["jest", "node"],
     "resolveJsonModule": true,
     "isolatedModules": false,

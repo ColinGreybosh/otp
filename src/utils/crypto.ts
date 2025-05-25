@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 
 import * as base32 from 'hi-base32';
 
-import { OTPException, SecretLength } from '@/types';
+import { OTPException, SecretLength } from '../types';
 
 /**
  * Generates a cryptographically secure random secret and returns it as a base32-encoded string

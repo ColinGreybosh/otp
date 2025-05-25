@@ -1,4 +1,4 @@
-import { type OTPAlgorithm, OTPException, SecretLength } from '@/types';
+import { type OTPAlgorithm, OTPException, SecretLength } from '../types';
 
 import { decodeSecretForHMAC } from './crypto';
 

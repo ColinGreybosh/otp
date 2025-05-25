@@ -1,5 +1,6 @@
 import { createHmac } from 'node:crypto';
 
+import { decodeSecretForHMAC } from '../utils/crypto';
 import {
   validateAlgorithm,
   validateCounter,
@@ -7,11 +8,9 @@ import {
   validatePeriod,
   validateSecret,
   validateToken,
-} from '@/utils/validation';
+} from '../utils/validation';
 
-import { decodeSecretForHMAC } from '../utils/crypto';
-
-import type { OTPResult, TOTPConfig, ValidationResult } from '@/types';
+import type { OTPResult, TOTPConfig, ValidationResult } from '../types';
 
 /**
  * Time-based One-Time Password (TOTP) implementation

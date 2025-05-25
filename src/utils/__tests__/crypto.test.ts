@@ -81,6 +81,55 @@ describe('crypto utilities', () => {
       const secret = generateSecret(20);
       expect(secret).toMatch(/^[A-Z2-7]+=*$/);
     });
+
+    it('should reject Infinity as length parameter', () => {
+      expect(() => generateSecret(Infinity as never)).toThrow(OTPException);
+      expect(() => generateSecret(Infinity as never)).toThrow(
+        'Secret length must be a positive integer'
+      );
+    });
+
+    it('should reject -Infinity as length parameter', () => {
+      expect(() => generateSecret(-Infinity as never)).toThrow(OTPException);
+      expect(() => generateSecret(-Infinity as never)).toThrow(
+        'Secret length must be a positive integer'
+      );
+    });
+
+    it('should reject string numbers as length parameter', () => {
+      expect(() => generateSecret('32' as never)).toThrow(OTPException);
+      expect(() => generateSecret('32' as never)).toThrow(
+        'Secret length must be a positive integer'
+      );
+    });
+
+    it('should reject object as length parameter', () => {
+      expect(() => generateSecret({} as never)).toThrow(OTPException);
+      expect(() => generateSecret({} as never)).toThrow(
+        'Secret length must be a positive integer'
+      );
+    });
+
+    it('should reject array as length parameter', () => {
+      expect(() => generateSecret([32] as never)).toThrow(OTPException);
+      expect(() => generateSecret([32] as never)).toThrow(
+        'Secret length must be a positive integer'
+      );
+    });
+
+    it('should reject null as length parameter', () => {
+      expect(() => generateSecret(null as never)).toThrow(OTPException);
+      expect(() => generateSecret(null as never)).toThrow(
+        'Secret length must be a positive integer'
+      );
+    });
+
+    it('should use default length when undefined is passed', () => {
+      // undefined should use the default value of 32, not throw an error
+      expect(() => generateSecret(undefined)).not.toThrow();
+      const secret = generateSecret(undefined);
+      expect(secret).toMatch(/^[A-Z2-7]+=*$/);
+    });
   });
 
   describe('decodeSecretForHMAC', () => {
@@ -181,6 +230,33 @@ describe('crypto utilities', () => {
       malformedSecrets.forEach(secret => {
         expect(() => decodeSecretForHMAC(secret)).toThrow(OTPException);
       });
+    });
+
+    it('should handle secrets that are only whitespace', () => {
+      expect(() => decodeSecretForHMAC('   ')).toThrow(OTPException);
+      expect(() => decodeSecretForHMAC('   ')).toThrow(
+        'Secret must be a valid base32-encoded string'
+      );
+    });
+
+    it('should handle secrets with mixed case and whitespace', () => {
+      const mixedSecret = ' jBsWy3dP ehPk3pXp ';
+      const cleanSecret = 'JBSWY3DPEHPK3PXP';
+
+      const bufferMixed = decodeSecretForHMAC(mixedSecret);
+      const bufferClean = decodeSecretForHMAC(cleanSecret);
+
+      expect(bufferMixed).toEqual(bufferClean);
+    });
+
+    it('should handle secrets with tabs and newlines', () => {
+      const secretWithWhitespace = '\tJBSWY3DP\nEHPK3PXP\r';
+      const cleanSecret = 'JBSWY3DPEHPK3PXP';
+
+      const bufferWithWhitespace = decodeSecretForHMAC(secretWithWhitespace);
+      const bufferClean = decodeSecretForHMAC(cleanSecret);
+
+      expect(bufferWithWhitespace).toEqual(bufferClean);
     });
 
     // Note: Base32 decode error handling test is omitted due to TypeScript strict mode

@@ -9,12 +9,6 @@
 
     /* Modules */
     "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/*"],
-      "@/types/*": ["src/types/*"],
-      "@/utils/*": ["src/utils/*"],
-      "@/lib/*": ["src/lib/*"]
-    },
     "rootDirs": ["src"],
     "typeRoots": ["node_modules/@types", "src/types"],
     "types": ["node"],

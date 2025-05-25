@@ -1,8 +1,7 @@
 import { describe, expect, it } from '@jest/globals';
 import * as base32 from 'hi-base32';
 
-import { OTPException } from '@/types';
-
+import { OTPException } from '../../types';
 import {
   validateAlgorithm,
   validateCounter,
