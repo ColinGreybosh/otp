@@ -1,4 +1,4 @@
-import { type OTPAlgorithm, OTPException, SecretLength } from '../types';
+import { type OTPAlgorithm, OTPException, type SecretLength } from '../types';
 
 import { decodeSecretForHMAC } from './crypto';
 
@@ -30,11 +30,11 @@ export function validateSecret(secret: string, algorithm: OTPAlgorithm): void {
 export function getSecretLength(algorithm: OTPAlgorithm): SecretLength {
   switch (algorithm) {
     case 'SHA1':
-      return 20;
+      return 20; // 20 bytes for SHA1
     case 'SHA256':
-      return 32;
+      return 32; // 32 bytes for SHA256
     case 'SHA512':
-      return 64;
+      return 64; // 64 bytes for SHA512
     default:
       throw new UnexpectedCaseError(algorithm);
   }
