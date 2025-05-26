@@ -1,8 +1,8 @@
 import { randomBytes } from 'node:crypto';
 
-import * as base32 from 'hi-base32';
+import { OTPException, type SecretLength } from '../types';
 
-import { OTPException, SecretLength } from '../types';
+import { decode, encode } from './base32';
 
 /**
  * Generates a cryptographically secure random secret and returns it as a base32-encoded string
@@ -34,7 +34,7 @@ export function generateSecret(length: SecretLength = 32): string {
 
   try {
     const randomBuffer = randomBytes(length);
-    return base32.encode(randomBuffer);
+    return encode(randomBuffer);
   } catch (error) {
     throw new OTPException(
       'INVALID_SECRET',
@@ -57,7 +57,7 @@ export function generateSecret(length: SecretLength = 32): string {
  * // Use buffer with createHmac()
  * ```
  */
-export function decodeSecretForHMAC(base32Secret: string): Buffer {
+export function decodeSecretForHMAC(base32Secret: string): Readonly<Buffer> {
   if (!base32Secret || typeof base32Secret !== 'string') {
     throw new OTPException(
       'INVALID_SECRET',
@@ -77,8 +77,7 @@ export function decodeSecretForHMAC(base32Secret: string): Buffer {
   }
 
   try {
-    const decodedBytes = base32.decode.asBytes(cleanSecret);
-    return Buffer.from(decodedBytes);
+    return decode(cleanSecret);
   } catch (error) {
     throw new OTPException(
       'INVALID_SECRET',

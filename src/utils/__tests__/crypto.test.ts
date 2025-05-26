@@ -1,9 +1,9 @@
 import { createHmac } from 'node:crypto';
 
 import { describe, expect, it } from '@jest/globals';
-import * as base32 from 'hi-base32';
 
-import { OTPException, SecretLength } from '../../types';
+import { OTPException, type SecretLength } from '../../types';
+import { decode } from '../base32';
 import { decodeSecretForHMAC, generateSecret } from '../crypto';
 
 describe('crypto utilities', () => {
@@ -141,7 +141,7 @@ describe('crypto utilities', () => {
       expect(buffer.length).toBeGreaterThan(0);
 
       // Verify the decoded content matches expected
-      const expectedBytes = base32.decode.asBytes(testSecret);
+      const expectedBytes = decode(testSecret);
       expect(buffer).toEqual(Buffer.from(expectedBytes));
     });
 

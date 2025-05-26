@@ -13,14 +13,12 @@ jest.mock('node:crypto', () => {
   };
 });
 
-// Mock the hi-base32 module
+// Mock the base32 module
 const mockBase32Encode = jest.fn();
-const mockBase32DecodeAsBytes = jest.fn();
-jest.mock('hi-base32', () => ({
+const mockBase32Decode = jest.fn();
+jest.mock('../base32', () => ({
   encode: mockBase32Encode,
-  decode: {
-    asBytes: mockBase32DecodeAsBytes,
-  },
+  decode: mockBase32Decode,
 }));
 
 // Import after mocking
@@ -88,7 +86,7 @@ describe('crypto utilities - error handling', () => {
   describe('decodeSecretForHMAC error handling', () => {
     it('should handle base32 decoding errors', () => {
       const error = new Error('Invalid base32 format');
-      mockBase32DecodeAsBytes.mockImplementation(() => {
+      mockBase32Decode.mockImplementation(() => {
         throw error;
       });
 
@@ -99,7 +97,7 @@ describe('crypto utilities - error handling', () => {
     });
 
     it('should handle unknown errors in base32 decoding', () => {
-      mockBase32DecodeAsBytes.mockImplementation(() => {
+      mockBase32Decode.mockImplementation(() => {
         throw 'Unknown error type' as unknown;
       });
 
@@ -110,7 +108,7 @@ describe('crypto utilities - error handling', () => {
     });
 
     it('should handle null errors in base32 decoding', () => {
-      mockBase32DecodeAsBytes.mockImplementation(() => {
+      mockBase32Decode.mockImplementation(() => {
         throw null as unknown;
       });
 
@@ -118,29 +116,6 @@ describe('crypto utilities - error handling', () => {
       expect(() => decodeSecretForHMAC('VALIDFORMAT')).toThrow(
         'Failed to decode base32 secret: Invalid base32 format'
       );
-    });
-  });
-
-  describe('successful operations with mocks', () => {
-    it('should work when randomBytes and base32.encode succeed', () => {
-      const mockBuffer = Buffer.from([1, 2, 3, 4]);
-      mockRandomBytes.mockReturnValue(mockBuffer);
-      mockBase32Encode.mockReturnValue('AEBAGBA=');
-
-      const result = generateSecret(32);
-      expect(result).toBe('AEBAGBA=');
-      expect(mockRandomBytes).toHaveBeenCalledWith(32);
-      expect(mockBase32Encode).toHaveBeenCalledWith(mockBuffer);
-    });
-
-    it('should work when base32.decode.asBytes succeeds', () => {
-      const mockBytes = [1, 2, 3, 4];
-      mockBase32DecodeAsBytes.mockReturnValue(mockBytes);
-
-      const result = decodeSecretForHMAC('AEBAGBA=');
-      expect(Buffer.isBuffer(result)).toBe(true);
-      expect(result).toEqual(Buffer.from(mockBytes));
-      expect(mockBase32DecodeAsBytes).toHaveBeenCalledWith('AEBAGBA=');
     });
   });
 });
