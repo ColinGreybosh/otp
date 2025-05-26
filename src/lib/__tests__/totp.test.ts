@@ -200,15 +200,15 @@ describe('TOTP', () => {
 
   describe('RFC 6238 test vectors', () => {
     // Test vectors from RFC 6238 Appendix B
-    // The test token shared secret uses the ASCII string value "12345678901234567890"
+    // The test token shared secret uses the ASCII string value "1234567890" repeated
     // For different algorithms, the secret is padded to the appropriate length
     const rfcSecrets = {
-      SHA1: base32.encode('12345678901234567890', true), // 20 bytes ASCII
-      SHA256: base32.encode('12345678901234567890123456789012', true), // 32 bytes ASCII
-      SHA512: base32.encode(
-        '1234567890123456789012345678901234567890123456789012345678901234',
-        true
-      ), // 64 bytes ASCII
+      // 20 bytes ASCII
+      SHA1: base32.encode('1234567890'.repeat(2), true),
+      // 32 bytes ASCII
+      SHA256: base32.encode('1234567890'.repeat(3) + '12', true),
+      // 64 bytes ASCII
+      SHA512: base32.encode('1234567890'.repeat(6) + '1234', true),
     };
 
     const testVectors = [
