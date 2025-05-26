@@ -29,7 +29,7 @@ export class TOTP {
    */
   public generate(timestamp?: number): OTPResult {
     const currentTime = timestamp ?? Date.now();
-    const timeStep = Math.floor(currentTime / 1000 / this.config.period);
+    const timeStep = this.getCurrentTimeStep(currentTime);
     const token = this.generateToken(timeStep);
     const remainingTime =
       this.config.period - ((currentTime / 1000) % this.config.period);
@@ -50,25 +50,22 @@ export class TOTP {
   ): ValidationResult {
     validateToken(token, this.config.digits);
 
-    const currentTime = timestamp ?? Date.now();
-    const currentTimeStep = Math.floor(currentTime / 1000 / this.config.period);
+    const currentTimeStep = this.getCurrentTimeStep(timestamp);
 
     // Check current time step and surrounding window
+    let validationResult: ValidationResult = { isValid: false };
     for (let i = -window; i <= window; i++) {
       const timeStep = currentTimeStep + i;
       const expectedToken = this.generateToken(timeStep);
 
       if (this.constantTimeEquals(token, expectedToken)) {
-        return {
+        validationResult = {
           isValid: true,
           delta: i,
         };
       }
     }
-
-    return {
-      isValid: false,
-    };
+    return validationResult;
   }
 
   /**
