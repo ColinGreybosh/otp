@@ -128,6 +128,9 @@ describe('TOTP', () => {
       const validation = totp.validate(result.token, timestamp);
 
       expect(validation.isValid).toBe(true);
+      if (!validation.isValid) {
+        throw new Error('Validation failed');
+      }
       expect(validation.delta).toBe(0);
     });
 
@@ -139,11 +142,17 @@ describe('TOTP', () => {
       // Test with previous time step
       const validation1 = totp.validate(result.token, timestamp + 30000, 1);
       expect(validation1.isValid).toBe(true);
+      if (!validation1.isValid) {
+        throw new Error('Validation failed');
+      }
       expect(validation1.delta).toBe(-1);
 
       // Test with next time step
       const validation2 = totp.validate(result.token, timestamp - 30000, 1);
       expect(validation2.isValid).toBe(true);
+      if (!validation2.isValid) {
+        throw new Error('Validation failed');
+      }
       expect(validation2.delta).toBe(1);
     });
 
@@ -155,7 +164,6 @@ describe('TOTP', () => {
       // Test with time step outside window
       const validation = totp.validate(result.token, timestamp + 60000, 1);
       expect(validation.isValid).toBe(false);
-      expect(validation.delta).toBeUndefined();
     });
 
     it('should reject invalid token format', () => {

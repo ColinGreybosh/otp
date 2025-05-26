@@ -42,18 +42,20 @@ export interface HOTPConfig extends Omit<OTPConfig, 'period'> {
  */
 export interface OTPResult {
   readonly token: string;
-  readonly remainingTime?: number;
-  readonly nextCounter?: number;
+  readonly remainingTime: number;
 }
 
 /**
  * OTP validation result
  */
-export interface ValidationResult {
-  readonly isValid: boolean;
-  readonly delta?: number;
-  readonly usedCounter?: number;
-}
+export type ValidationResult =
+  | {
+      readonly isValid: true;
+      readonly delta: number;
+    }
+  | {
+      readonly isValid: false;
+    };
 
 /**
  * Error types for OTP operations
