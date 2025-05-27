@@ -1,7 +1,7 @@
 # OTP Library
 
-A comprehensive TypeScript library for generating, validating, and managing one-time passwords (OTP)
-for authentication purposes.
+A TypeScript library for generating, validating, and managing one-time passwords (OTP) for
+authentication purposes.
 
 ## Features
 
@@ -9,7 +9,7 @@ for authentication purposes.
 - **HOTP (HMAC-based OTP)**: Generate and validate HMAC-based OTPs based on RFC 4226
 - **Multiple algorithms**: Support for SHA1, SHA256, and SHA512
 - **Customizable**: Configure OTP parameters such as secret, algorithm, digits, period, and counter
-- **TypeScript**: Full TypeScript support with comprehensive type definitions
+- **TypeScript**: Full TypeScript support with type definitions
 - **Secure**: Cryptographically secure secret generation using Node.js crypto module
 - **RFC compliant**: Implements RFC 6238 (TOTP) and RFC 4226 (HOTP) specifications
 
@@ -30,7 +30,7 @@ const secret = generateSecret();
 // Create TOTP instance
 const totp = new TOTP({
   secret,
-  algorithm: 'SHA256',
+  algorithm: 'SHA1',
   digits: 6,
   period: 30,
 });
