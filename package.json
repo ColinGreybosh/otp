@@ -1,7 +1,7 @@
 {
   "name": "@colingreybosh/otp-lib",
   "version": "0.0.3",
-  "description": "A comprehensive TypeScript library for generating, validating, and managing one-time passwords (OTP) for authentication purposes.",
+  "description": "A TypeScript library for generating, validating, and managing one-time passwords (OTP) for authentication purposes.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "homepage": "https://github.com/ColinGreybosh/otp#readme",
